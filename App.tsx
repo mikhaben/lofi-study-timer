@@ -1,18 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar'
+import { View, SafeAreaView } from 'react-native'
 
-export default function App() {
+import MainScreen from './src/views/MainScreen'
+
+const App = (): any => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+    <View className="flex-1 bg-primary">
+      <SafeAreaView className="flex-1 w-full">
+        <MainScreen/>
+        <StatusBar style="dark" />
+      </SafeAreaView>
     </View>
-  );
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
