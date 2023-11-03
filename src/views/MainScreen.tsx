@@ -1,11 +1,12 @@
-import { Text, View } from 'react-native'
-import { useState, useEffect } from 'react'
+import { View } from 'react-native'
+import React, { useState, useEffect } from 'react'
 
 import Controllers from '../components/Controllers'
 import Menu from '../components/Menu'
+import Timer from '../components/Timer'
 import TaskList from '../components/TaskList'
 
-const MainScreen = (): any => {
+const MainScreen = (): React.ReactNode => {
   const [seconds, setSeconds] = useState<number>(0)
   const [running, setRunning] = useState<boolean>(false)
   const [toggleList, setToggleList] = useState<boolean>(false)
@@ -42,13 +43,14 @@ const MainScreen = (): any => {
   return (
     <View className="flex-1 items-center justify-center w-full">
       <Menu />
-      <Text className="text-black text-7xl">{seconds}</Text>
+      <Timer seconds={seconds} />
       <TaskList />
       <Controllers
         playAction={toggleRunning}
         resetAction={resetTimer}
         listAction={toggleListAction}
-        isPlaying={running}
+        running={running}
+        seconds={seconds}
       />
     </View>
   )
