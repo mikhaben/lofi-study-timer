@@ -3,12 +3,14 @@ import React, { useState } from 'react'
 
 import Controllers from '../components/Controllers'
 import Menu from '../components/Menu'
-import Timer from '../components/Timer'
 import TaskList from '../components/TaskList'
 import useTimer from '../hooks/useTimer'
+import BigClockFace from '../components/ClockFace/BigClockFace'
+
+import TaskListManage from './TaskListManage'
 
 const MainScreen = (): React.ReactNode => {
-  const { running, seconds, toggleRunning, resetTimer } = useTimer()
+  const { running, seconds, formatted, toggleRunning, resetTimer } = useTimer()
   const [toggleList, setToggleList] = useState<boolean>(false)
 
   const toggleListAction = (): void => {
@@ -18,7 +20,7 @@ const MainScreen = (): React.ReactNode => {
   return (
     <View className="flex-1 items-center justify-center w-full">
       <Menu />
-      <Timer seconds={seconds} />
+      <BigClockFace formatted={formatted} />
       <TaskList />
       <Controllers
         playAction={toggleRunning}
@@ -27,6 +29,7 @@ const MainScreen = (): React.ReactNode => {
         running={running}
         seconds={seconds}
       />
+      {toggleList && <TaskListManage closeAction={toggleListAction} running={running} formatted={formatted} />}
     </View>
   )
 }

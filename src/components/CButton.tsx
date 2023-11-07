@@ -14,7 +14,7 @@ const CButton = (props: ButtonProps): any => {
     <Pressable
       className={
         `${props.disabled ? 'bg-zinc-300' : 'bg-violet-300'} 
-        rounded-full mx-3 shadow-sm w-12 h-12 flex justify-center items-center`
+        rounded-2xl mx-3 shadow-sm w-12 h-12 flex justify-center items-center`
       }
       onPress={props.disabled ? undefined : props.onPress}
     >

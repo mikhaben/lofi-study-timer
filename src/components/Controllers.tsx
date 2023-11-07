@@ -15,7 +15,7 @@ const Controllers = (props: ControllersProps): any => {
   const { playAction, resetAction, listAction } = props
   return (
     <View className="flex flex-row justify-center w-full pt-20 pb-3">
-      <CButton onPress={listAction} title="L" disabled={true}/>
+      <CButton onPress={listAction} title="L" disabled={false}/>
       <CButton
         onPress={resetAction}
         icon={<IonicIcon name={'stop'} size={19} />}
