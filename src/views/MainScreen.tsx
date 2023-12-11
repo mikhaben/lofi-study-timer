@@ -29,7 +29,13 @@ const MainScreen = (): React.ReactNode => {
         running={running}
         seconds={seconds}
       />
-      {toggleList && <TaskListManage closeAction={toggleListAction} running={running} formatted={formatted} />}
+
+      <TaskListManage
+        closeAction={toggleListAction}
+        running={running}
+        formatted={formatted}
+        visible={toggleList}
+      />
     </View>
   )
 }

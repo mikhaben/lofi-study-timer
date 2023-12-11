@@ -1,68 +1,101 @@
-import React from 'react'
-import { View, Text, Pressable } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, Pressable, Animated, Modal, TouchableWithoutFeedback } from 'react-native'
 import IonicIcon from '@expo/vector-icons/Ionicons'
 
 import CButton from '../components/CButton'
 import SmallClockFace from '../components/ClockFace/SmallClockFace'
+import List from '../components/TaskListManager/List'
+import StorageService from '../services/StorageService'
 
 interface TaskListManageProps {
   closeAction: () => void
   running: boolean
   formatted: any
+  visible: boolean
 }
 
 const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
-  const addItem = (): void => {}
+  const [showModal, setShowModal] = useState(props.visible)
+  const slideAnim = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    toggleModal()
+  }, [props.visible])
+
+  const toggleModal = (): void => {
+    if (props.visible) {
+      setShowModal(true)
+      Animated.timing(slideAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true
+      }).start()
+    } else {
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true
+      }).start(() => { setShowModal(false) })
+    }
+  }
+
+  const slideUpStyle = {
+    transform: [{
+      translateY: slideAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [700, 100] // Adjust these values for your modal
+      })
+    }]
+  }
+
+  const addItem = async (): Promise<void> => {
+    await StorageService.storeTask({
+      title: 'Task 1',
+      progress: 0,
+      createdAt: new Date().toISOString()
+    })
+    // await StorageService.removeAllTasks();
+  }
 
   return (
-    <View className={'absolute w-full h-full bottom-0 left-0'}>
-      <View className={'ml-auto pb-2'}>
-        <CButton
-          onPress={addItem}
-          icon={<IonicIcon name={'add'} size={21} />}
-          disabled={false}
-        />
+    <Modal
+      transparent
+      visible={showModal}
+      onRequestClose={props.closeAction}
+    >
+
+      <View className={'flex-1 justify-end'}>
+        <TouchableWithoutFeedback onPress={props.closeAction}>
+          <View className={'flex-1 absolute w-full h-full bg-black opacity-70'}/>
+        </TouchableWithoutFeedback>
+
+        {/* Actual model */}
+        <Animated.View className={'rounded-t-xl relative'} style={slideUpStyle}>
+          {/* Add btn */}
+          <View className={'ml-auto pb-2 pr-1'}>
+            <CButton
+              onPress={addItem}
+              icon={<IonicIcon name={'add'} size={21} />}
+              disabled={false}
+            />
+          </View>
+
+          <View className={'w-full h-4/5 py-2 rounded-2xl bg-amber-50'}>
+            {/* Timer */}
+            <View className={'flex flex-row justify-between pb-3 pt-1 mx-3'}>
+              {props.running && <View className={'pl-4'}>
+                <SmallClockFace formatted={props.formatted} running={props.running} />
+              </View>}
+              <Pressable onPress={props.closeAction} className={'ml-auto px-4'}>
+                <IonicIcon name={'chevron-down-outline'} size={19} />
+              </Pressable>
+            </View>
+            {/* List */}
+            <List />
+          </View>
+        </Animated.View>
       </View>
-
-      <View className={'w-full h-4/5 px-3 py-2 rounded-2xl bg-violet-50'}>
-
-        <View className={'flex flex-row justify-between pb-3 pt-1'}>
-          {props.running && <View className={'pl-4'}>
-            <SmallClockFace formatted={props.formatted} running={props.running} />
-          </View>}
-          <Pressable onPress={props.closeAction} className={'ml-auto px-4'}>
-            <IonicIcon name={'chevron-down-outline'} size={19} />
-          </Pressable>
-        </View>
-
-        <View className={'flex flex-col gap-y-2'}>
-          <View className={'flex rounded bg-violet-50 px-3 py-2 shadow'}>
-            <View className={'flex flex-row justify-between'}>
-              <Text className={'font-semibold text-base'}>⚙️ Do smt...</Text>
-              <Text className={'text-green-700 font-bold'}>23%</Text>
-            </View>
-            <Text className={'text-gray-600 pl-1 text-xs'}>23.22.22</Text>
-          </View>
-
-          <View className={'flex rounded bg-violet-50 px-3 py-2 shadow'}>
-            <View className={'flex flex-row justify-between'}>
-              <Text className={'font-semibold text-base'}>Wash my hand</Text>
-              <Text className={'text-green-700 font-bold'}>98%</Text>
-            </View>
-            <Text className={'text-gray-600 pl-1 text-xs'}>23.22.22</Text>
-          </View>
-
-          <View className={'flex rounded bg-violet-50 px-3 py-2 shadow'}>
-            <View className={'flex flex-row justify-between'}>
-              <Text className={'font-semibold text-base'}>Feed cat</Text>
-              <Text className={'text-green-700 font-bold'}>52%</Text>
-            </View>
-            <Text className={'text-gray-600 pl-1 text-xs'}>23.22.22</Text>
-          </View>
-
-        </View>
-      </View>
-    </View>
+    </Modal>
   )
 }
 

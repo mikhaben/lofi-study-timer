@@ -14,6 +14,10 @@ const Menu = (): any => {
       </Pressable>
 
       <Pressable>
+        <IonicIcon name={'time-outline'} size={22} />
+      </Pressable>
+
+      <Pressable>
         <IonicIcon name={'color-palette-outline'} size={22} />
       </Pressable>
 

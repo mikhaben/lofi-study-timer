@@ -7,3 +7,9 @@ export interface ITimer {
     seconds: number
   }
 }
+
+export interface ITask {
+  title: string
+  progress: number
+  createdAt: string
+}
