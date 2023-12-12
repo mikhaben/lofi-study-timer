@@ -3,13 +3,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { type ITask } from '../models/Main'
 
 export default class StorageService {
+  private static logError (e: any): void {
+    console.error(e)
+  }
+
   static async storeTask (task: ITask): Promise<void> {
     try {
       const tasks = await this.getTasks()
       tasks.push(task)
       await AsyncStorage.setItem('tasks', JSON.stringify(tasks))
     } catch (e) {
-
+      this.logError(e)
     }
   }
 
@@ -21,6 +25,7 @@ export default class StorageService {
       }
       return JSON.parse(value)
     } catch (e) {
+      this.logError(e)
       return []
     }
   }
@@ -31,7 +36,7 @@ export default class StorageService {
       const filteredTasks = tasks.filter(task => task.id !== id)
       await AsyncStorage.setItem('tasks', JSON.stringify(filteredTasks))
     } catch (e) {
-
+      this.logError(e)
     }
   }
 
@@ -39,6 +44,7 @@ export default class StorageService {
     try {
       await AsyncStorage.removeItem('tasks')
     } catch (e) {
+      this.logError(e)
     }
   }
 }
