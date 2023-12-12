@@ -17,15 +17,23 @@ const List = (): React.ReactNode => {
     fetchTasks().catch(console.error)
   }, [])
 
+  const editTask = (task: ITask): void => {
+    console.log('editTask', task)
+  }
+
+  const deleteTask = (task: ITask): void => {
+    console.log('deleteTask', task)
+  }
+
   return (
     <ScrollView className={'flex flex-col mb-10'}>
 
       {items.map((item: ITask, index: number) => (
         <Task
           key={index}
-          title={item.title}
-          progress={item.progress}
-          createdAt={item.createdAt}
+          task={item}
+          onEdit={editTask.bind(this, item)}
+          onDelete={deleteTask.bind(this, item)}
         />
       ))}
 

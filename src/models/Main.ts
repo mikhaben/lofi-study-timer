@@ -8,8 +8,18 @@ export interface ITimer {
   }
 }
 
+export interface ISubtask {
+  title: string
+  id: number
+  timer: number
+  completedTime: number
+  // to sort by
+  createdAt: string
+}
+
 export interface ITask {
   title: string
-  progress: number
+  id: number
   createdAt: string
+  subtasks: ISubtask[]
 }

@@ -6,6 +6,7 @@ import CButton from '../components/CButton'
 import SmallClockFace from '../components/ClockFace/SmallClockFace'
 import List from '../components/TaskListManager/List'
 import StorageService from '../services/StorageService'
+import IdGenerator from '../utils/IdGenerator'
 
 interface TaskListManageProps {
   closeAction: () => void
@@ -51,10 +52,11 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
   const addItem = async (): Promise<void> => {
     await StorageService.storeTask({
       title: 'Task 1',
-      progress: 0,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      id: IdGenerator.numericId(),
+      subtasks: []
     })
-    // await StorageService.removeAllTasks();
+    // await StorageService.removeAllTasks()
   }
 
   return (
