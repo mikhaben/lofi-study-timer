@@ -25,6 +25,16 @@ export default class StorageService {
     }
   }
 
+  static async removeTask (id: number): Promise<void> {
+    try {
+      const tasks = await this.getTasks()
+      const filteredTasks = tasks.filter(task => task.id !== id)
+      await AsyncStorage.setItem('tasks', JSON.stringify(filteredTasks))
+    } catch (e) {
+
+    }
+  }
+
   static async removeAllTasks (): Promise<void> {
     try {
       await AsyncStorage.removeItem('tasks')

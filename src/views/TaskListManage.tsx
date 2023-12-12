@@ -50,10 +50,11 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
   }
 
   const addItem = async (): Promise<void> => {
+    const id = IdGenerator.numericId()
     await StorageService.storeTask({
-      title: 'Task 1',
+      title: id.toString(),
       createdAt: new Date().toISOString(),
-      id: IdGenerator.numericId(),
+      id,
       subtasks: []
     })
     // await StorageService.removeAllTasks()

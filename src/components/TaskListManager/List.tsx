@@ -21,7 +21,10 @@ const List = (): React.ReactNode => {
     console.log('editTask', task)
   }
 
-  const deleteTask = (task: ITask): void => {
+  const deleteTask = async (task: ITask): Promise<void> => {
+    const updatedItems = items.filter(item => item.id !== task.id)
+    setItems(updatedItems)
+    await StorageService.removeTask(task.id)
     console.log('deleteTask', task)
   }
 
@@ -30,7 +33,7 @@ const List = (): React.ReactNode => {
 
       {items.map((item: ITask, index: number) => (
         <Task
-          key={index}
+          key={item.id}
           task={item}
           onEdit={editTask.bind(this, item)}
           onDelete={deleteTask.bind(this, item)}

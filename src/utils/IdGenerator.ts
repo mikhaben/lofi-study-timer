@@ -1,8 +1,7 @@
 export default class IdGenerator {
   static numericId (): number {
-    return 2
-    // const arr = new Uint32Array(1)
-    // global.crypto.getRandomValues(arr)
-    // return arr[0] / (0xffffffff + 1)
+    const rand = Math.floor(Math.random() * 100)
+    const timestamp = Date.now()
+    return parseInt(`${timestamp}${rand}`)
   }
 }
