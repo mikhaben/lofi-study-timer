@@ -4,13 +4,13 @@ import IonicIcon from '@expo/vector-icons/Ionicons'
 
 import { type ITask } from '../../models/Main'
 
-interface ITaskProps {
+interface TaskProps {
   task: ITask
   onDelete?: () => void
   onEdit?: () => void
 }
 
-const Task = (props: ITaskProps): React.ReactNode => {
+const Task = (props: TaskProps): React.ReactNode => {
   return (
     <View className={'flex flex-row rounded px-3 mx-3 py-2 mb-2 justify-between bg-amber-50 shadow'}>
       {/* Task */}
@@ -25,10 +25,10 @@ const Task = (props: ITaskProps): React.ReactNode => {
       {/* Controls */}
       <View className={'flex flex-row items-center'}>
         <Pressable onPress={props.onDelete} className={'flex items-center justify-center px-2'}>
-          <IonicIcon name={'close'} className={'text-gray-600 text-xs'} size={20} />
+          <IonicIcon name={'close'} className={'text-xs'} size={20} />
         </Pressable>
         <Pressable onPress={props.onEdit} className={'flex items-center justify-center px-2'}>
-          <IonicIcon name={'pencil-outline'} className={'text-gray-600 text-xs'} size={17} />
+          <IonicIcon name={'pencil-outline'} className={'text-xs'} size={17} />
         </Pressable>
       </View>
     </View>

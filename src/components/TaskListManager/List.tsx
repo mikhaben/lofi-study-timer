@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { ScrollView } from 'react-native'
 
-import { type ITask } from '../../models/Main'
+import type { ITask } from '../../models/Main'
 import StorageService from '../../services/StorageService'
+import Task from '../../components/TaskListManager/Task'
 
-import Task from './Task'
+interface ListProps {
+  pickTask: (task: ITask) => void
+}
 
-const List = (): React.ReactNode => {
+const List = ({ pickTask }: ListProps): React.ReactNode => {
   const [items, setItems] = useState<ITask[]>([])
 
   useEffect(() => {
@@ -18,7 +21,7 @@ const List = (): React.ReactNode => {
   }, [])
 
   const editTask = (task: ITask): void => {
-    console.log('editTask', task)
+    pickTask(task)
   }
 
   const deleteTask = async (task: ITask): Promise<void> => {
@@ -30,7 +33,6 @@ const List = (): React.ReactNode => {
 
   return (
     <ScrollView className={'flex flex-col mb-10'}>
-
       {items.map((item: ITask, index: number) => (
         <Task
           key={item.id}
@@ -39,7 +41,6 @@ const List = (): React.ReactNode => {
           onDelete={deleteTask.bind(this, item)}
         />
       ))}
-
     </ScrollView>
   )
 }
