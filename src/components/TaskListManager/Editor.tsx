@@ -35,10 +35,10 @@ const Editor = (props: EditorProps): React.ReactNode => {
   return (
     <ScrollView className={'flex flex-col mb-10 px-5'}>
 
-      {!props.task && <TextInput
+      <TextInput
         placeholder={'Task list name'}
         className={'bg-amber-50 border border-violet-100 text-gray-900 rounded block grow px-2 py-2 shadow-sm mb-3'}
-      />}
+      />
 
       <InputGroup
         mainAction={isEmpty() ? addAction : removeAction}
