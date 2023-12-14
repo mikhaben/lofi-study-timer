@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 
 import type { ITask } from '../../models/Main'
 import StorageService from '../../services/StorageService'
@@ -28,11 +28,17 @@ const List = ({ pickTask }: ListProps): React.ReactNode => {
     const updatedItems = items.filter(item => item.id !== task.id)
     setItems(updatedItems)
     await StorageService.removeTask(task.id)
-    console.log('deleteTask', task)
   }
 
   return (
     <ScrollView className={'flex flex-col mb-10'}>
+      {!items.length &&
+        <View className={'mx-5'}>
+          <Text className={'text-2xl text-center'}>No tasks for today</Text>
+          <Text className={'text-sm text-center text-violet-600'}>Enjoy this moment 😊</Text>
+        </View>
+      }
+
       {items.map((item: ITask, index: number) => (
         <Task
           key={item.id}

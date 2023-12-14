@@ -18,23 +18,22 @@ const MainScreen = (): React.ReactNode => {
   }
 
   return (
-    <View className="flex-1 items-center justify-center w-full">
+    <View className="flex-1 items-center justify-center w-full relative">
       <Menu />
       <BigClockFace formatted={formatted} />
       <TaskList />
+      <TaskListManage
+        closeAction={toggleListAction}
+        running={running}
+        formatted={formatted}
+        visible={toggleList}
+      />
       <Controllers
         playAction={toggleRunning}
         resetAction={resetTimer}
         listAction={toggleListAction}
         running={running}
         seconds={seconds}
-      />
-
-      <TaskListManage
-        closeAction={toggleListAction}
-        running={running}
-        formatted={formatted}
-        visible={toggleList}
       />
     </View>
   )

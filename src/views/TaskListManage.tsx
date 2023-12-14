@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Pressable, View, Text } from 'react-native'
 import IonicIcon from '@expo/vector-icons/Ionicons'
 
 import List from '../components/TaskListManager/List'
@@ -8,6 +8,8 @@ import CButton from '../components/CButton'
 import CModal from '../components/CModal'
 import SmallClockFace from '../components/ClockFace/SmallClockFace'
 import { type ITask } from '../models/Main'
+import IdGenerator from '../utils/IdGenerator'
+import StorageService from '../services/StorageService'
 
 interface TaskListManageProps {
   running: boolean
@@ -48,6 +50,30 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
     setShowEditor(true)
   }
 
+  const addTask = async (): Promise<any> => {
+    const id = IdGenerator.numericId()
+    const task: ITask = {
+      name: id.toString(),
+      id,
+      createdAt: new Date().toISOString(),
+      subtasks: [
+        {
+          name: 'subtask 1',
+          id: IdGenerator.numericId(),
+          createdAt: new Date().toISOString(),
+          timer: 2321
+        },
+        {
+          name: 'subtask 2',
+          id: IdGenerator.numericId(),
+          createdAt: new Date().toISOString(),
+          timer: 200
+        }
+      ]
+    }
+    await StorageService.storeTask(task)
+  }
+
   return (
     <CModal
       visible={props.visible}
@@ -72,6 +98,7 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
           {/*   <IonicIcon name={'chevron-down-outline'} size={19} /> */}
           {/* </Pressable> */}
         </View>
+        <Pressable onPress={addTask}><Text>ADD</Text></Pressable>
         {/* List */}
         {showList && <List pickTask={pickTaskToEdit} />}
         {/* Editor */}

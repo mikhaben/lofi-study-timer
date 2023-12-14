@@ -18,7 +18,7 @@ const Task = (props: TaskProps): React.ReactNode => {
         <View className={'flex flex-row items-center'}>
           <Text className={'text-green-700 font-bold'}>20%</Text>
           <Text className={'font-bold'}> | </Text>
-          <Text className={'font-semibold text-base'}>{props.task.title}</Text>
+          <Text className={'font-semibold text-base'}>{props.task.name}</Text>
         </View>
         <Text className={'text-gray-600 text-xs'}>{props.task.createdAt}</Text>
       </View>

@@ -9,16 +9,16 @@ export interface ITimer {
 }
 
 export interface ISubtask {
-  title: string
+  name: string
   id: number
   timer: number
-  completedTime: number
+  completedTime?: number
   // to sort by
   createdAt: string
 }
 
 export interface ITask {
-  title: string
+  name: string
   id: number
   createdAt: string
   subtasks: ISubtask[]

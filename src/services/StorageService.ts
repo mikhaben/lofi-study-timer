@@ -10,7 +10,13 @@ export default class StorageService {
   static async storeTask (task: ITask): Promise<void> {
     try {
       const tasks = await this.getTasks()
-      tasks.push(task)
+      // if same id exists, replace it
+      const index = tasks.findIndex(t => t.id === task.id)
+      if (index > -1) {
+        tasks[index] = task
+      } else {
+        tasks.push(task)
+      }
       await AsyncStorage.setItem('tasks', JSON.stringify(tasks))
     } catch (e) {
       this.logError(e)
