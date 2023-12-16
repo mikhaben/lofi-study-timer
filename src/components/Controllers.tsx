@@ -1,5 +1,4 @@
 import { View } from 'react-native'
-import IonicIcon from '@expo/vector-icons/Ionicons'
 
 import CButton from './CButton'
 
@@ -18,12 +17,14 @@ const Controllers = (props: ControllersProps): any => {
       <CButton onPress={listAction} title="L" disabled={false}/>
       <CButton
         onPress={resetAction}
-        icon={<IonicIcon name={'stop'} size={19} />}
+        icon={'stop'}
+        iconSize={19}
         disabled={!props.running && props.seconds === 0}
       />
       <CButton
         onPress={playAction}
-        icon={<IonicIcon name={!props.running ? 'play' : 'pause'} size={19}/>}
+        icon={!props.running ? 'play' : 'pause'}
+        iconSize={19}
       />
     </View>
   )

@@ -1,13 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { type ITask } from '../models/Main'
+import { type Task } from '../models/Main'
 
 export default class StorageService {
   private static logError (e: any): void {
     console.error(e)
   }
 
-  static async storeTask (task: ITask): Promise<void> {
+  static async storeTask (task: Task): Promise<void> {
     try {
       const tasks = await this.getTasks()
       // if same id exists, replace it
@@ -23,7 +23,7 @@ export default class StorageService {
     }
   }
 
-  static async getTasks (): Promise<ITask[]> {
+  static async getTasks (): Promise<Task[]> {
     try {
       const value = await AsyncStorage.getItem('tasks')
       if (!value) {

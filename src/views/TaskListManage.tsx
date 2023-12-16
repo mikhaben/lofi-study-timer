@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Pressable, View, Text } from 'react-native'
-import IonicIcon from '@expo/vector-icons/Ionicons'
 
 import List from '../components/TaskListManager/List'
 import Editor from '../components/TaskListManager/Editor'
 import CButton from '../components/CButton'
 import CModal from '../components/CModal'
 import SmallClockFace from '../components/ClockFace/SmallClockFace'
-import { type ITask } from '../models/Main'
-import IdGenerator from '../utils/IdGenerator'
+import { Subtask, Task } from '../models/Main'
 import StorageService from '../services/StorageService'
+import { TaskListManageContext } from '../context/TaskListManagerContext'
 
 interface TaskListManageProps {
   running: boolean
@@ -19,59 +18,67 @@ interface TaskListManageProps {
 }
 
 const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
-  const [showEditor, setShowEditor] = useState<boolean>(false)
-  const [showList, setShowList] = useState<boolean>(false)
-  const [pickedTask, setPickedTask] = useState<ITask | undefined>()
+  const [isList, setIsList] = useState<boolean>(true)
+  const [pickedTask, setPickedTask] = useState<Task | undefined>()
+  const [tasks, setTasks] = useState<Task[]>([])
 
   useEffect(() => {
-    setShowList(props.visible)
+    const fetchTasks = async (): Promise<void> => {
+      const storedTasks = await StorageService.getTasks()
+      setTasks(storedTasks)
+    }
+    fetchTasks().catch(console.error)
   }, [props.visible])
 
+  const removeTask = async (id: number): Promise<void> => {
+    const updated = tasks.filter((item: Task) => item.id !== id)
+    setTasks(updated)
+    await StorageService.removeTask(id)
+  }
+
+  const pickTask = (task: Task): void => {
+    setPickedTask(task)
+    setIsList(false)
+  }
+
   const mainAction = (): void => {
-    if (showList) {
-      setShowList(false)
-      setShowEditor(true)
-    } else {
-      setPickedTask(undefined)
-      setShowList(true)
-      setShowEditor(false)
-    }
+    setPickedTask(undefined)
+    setIsList(!isList)
   }
 
   const closeModal = (): void => {
     props.closeAction()
-    setShowList(true)
-    setShowEditor(false)
+    setPickedTask(undefined)
+    setIsList(true)
   }
 
-  const pickTaskToEdit = (task: ITask): void => {
-    setPickedTask(task)
-    setShowList(false)
-    setShowEditor(true)
-  }
-
-  const addTask = async (): Promise<any> => {
-    const id = IdGenerator.numericId()
-    const task: ITask = {
-      name: id.toString(),
-      id,
-      createdAt: new Date().toISOString(),
-      subtasks: [
-        {
-          name: 'subtask 1',
-          id: IdGenerator.numericId(),
-          createdAt: new Date().toISOString(),
-          timer: 2321
-        },
-        {
-          name: 'subtask 2',
-          id: IdGenerator.numericId(),
-          createdAt: new Date().toISOString(),
-          timer: 200
+  const addTask = async (task: Task): Promise<any> => {
+    const index = tasks.findIndex(t => t.id === task.id)
+    if (index !== -1) {
+      const updated = tasks.map((item: Task) => {
+        if (item.id === task.id) {
+          return task
         }
-      ]
+        return item
+      })
+      setTasks(updated)
+    } else {
+      const updated = [...tasks, task]
+      setTasks(updated)
     }
+
     await StorageService.storeTask(task)
+  }
+
+  const addTestTask = async (): Promise<void> => {
+    const newTask = new Task({
+      name: 'test',
+      subtasks: [
+        new Subtask({ name: 'test', time: 100 }),
+        new Subtask({ name: 'test', time: 233000 })
+      ]
+    })
+    await addTask(newTask)
   }
 
   return (
@@ -83,12 +90,13 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
       <View className={'ml-auto pb-2 pr-1'}>
         <CButton
           onPress={mainAction}
-          icon={<IonicIcon name={showList ? 'add' : 'chevron-back-outline'} size={21} />}
-          disabled={false}
+          icon={isList ? 'add' : 'chevron-back-outline'}
         />
       </View>
+
       {/* Content */}
       <View className={'w-full h-4/5 py-2 rounded-2xl bg-amber-50'}>
+
         {/* Timer */}
         <View className={'flex flex-row justify-between pb-3 pt-1 mx-3'}>
           {props.running && <View className={'pl-4'}>
@@ -98,11 +106,19 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
           {/*   <IonicIcon name={'chevron-down-outline'} size={19} /> */}
           {/* </Pressable> */}
         </View>
-        <Pressable onPress={addTask}><Text>ADD</Text></Pressable>
-        {/* List */}
-        {showList && <List pickTask={pickTaskToEdit} />}
-        {/* Editor */}
-        {showEditor && <Editor task={pickedTask} />}
+        <Pressable onPress={addTestTask}><Text>ADD</Text></Pressable>
+
+        {/* List, Editor */}
+        <TaskListManageContext.Provider value={{
+          removeTask,
+          addTask,
+          pickTask,
+          pickedTask,
+          tasks
+        }}>
+          {isList ? <List /> : <Editor />}
+        </TaskListManageContext.Provider>
+
       </View>
     </CModal>
   )

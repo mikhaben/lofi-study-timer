@@ -52,7 +52,7 @@
         "comma-dangle": ["error", "never"],
         "no-console": "warn",
         "no-debugger": "warn",
-        "no-unused-vars": "off",
+        "no-unused-vars": "warn",
         "no-empty": "off",
         "no-extra-semi": "off",
         "no-prototype-builtins": "off",

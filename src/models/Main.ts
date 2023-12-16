@@ -1,3 +1,5 @@
+import IdGenerator from '../utils/IdGenerator'
+
 export interface ITimer {
   running: boolean
   seconds: number
@@ -8,18 +10,40 @@ export interface ITimer {
   }
 }
 
-export interface ISubtask {
+export class Task {
   name: string
   id: number
-  timer: number
-  completedTime?: number
-  // to sort by
   createdAt: string
+  subtasks: Subtask[]
+
+  constructor (task: Partial<Task>) {
+    this.name = task.name ?? ''
+    this.id = task.id ?? IdGenerator.numericId()
+    this.createdAt = task.createdAt ?? new Date().toISOString()
+    this.subtasks = task.subtasks ?? []
+  }
+
+  public getFormattedCreateDate (): string {
+    return this.createdAt
+  }
 }
 
-export interface ITask {
+export class Subtask {
   name: string
   id: number
+  time: number
   createdAt: string
-  subtasks: ISubtask[]
+  completedTime?: number
+
+  constructor (subtask: Partial<Subtask>) {
+    this.name = subtask.name ?? ''
+    this.id = subtask.id ?? IdGenerator.numericId()
+    this.time = subtask.time ?? 0
+    this.completedTime = subtask.completedTime
+    this.createdAt = subtask.createdAt ?? new Date().toISOString()
+  }
+
+  public getFormattedTimer (): string {
+    return this.time.toString()
+  }
 }

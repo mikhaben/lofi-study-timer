@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import { type ITimer } from '../models/Main'
+import { formatTime } from '../utils/timeUtils'
 
 export interface TimerHook extends ITimer {
   toggleRunning: () => void
@@ -12,9 +13,10 @@ const useTimer = (): TimerHook => {
   const [running, setRunning] = useState<boolean>(false)
   const [intervalId, setIntervalId] = useState<any>(null)
 
-  const hours = Math.floor(seconds / 3600)
-  const minutes = Math.floor((seconds - hours * 3600) / 60)
-  const formattedSeconds: number = seconds % 60
+  const time = formatTime(seconds)
+  const hours = time.remaining.hours
+  const minutes = time.remaining.minutes
+  const remainingSeconds: number = time.remaining.seconds
 
   const toggleRunning = (): void => {
     setRunning(!running)
@@ -46,7 +48,7 @@ const useTimer = (): TimerHook => {
     formatted: {
       hours,
       minutes,
-      seconds: formattedSeconds
+      seconds: remainingSeconds
     },
     toggleRunning,
     resetTimer

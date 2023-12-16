@@ -1,55 +1,60 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, TextInput } from 'react-native'
-import IonicIcon from '@expo/vector-icons/Ionicons'
 
-import { type ISubtask } from '../../models/Main'
+import { Subtask } from '../../models/Main'
+import CButton from '../CButton'
+import { parseTimeFromString, stringifyTime } from '../../utils/timeUtils'
 
 interface InputGroupProps {
-  subtask?: ISubtask
-  mainAction: () => void
-  onUpdated: (subtask: ISubtask) => void
-  isAdd: boolean
+  subtask?: Subtask
+  removeAction: () => void
+  onUpdated: (subtask: Subtask) => void
 }
 
-const InputGroup = ({ mainAction, onUpdated, isAdd, subtask }: InputGroupProps): React.ReactNode => {
+const InputGroup = ({ subtask, removeAction, onUpdated }: InputGroupProps): React.ReactNode => {
   const [name, setName] = useState(subtask?.name ?? '')
-  const [timer, setTimer] = useState(subtask?.timer ?? 0)
+  const [time, setTime] = useState(subtask?.time ?? 0)
 
-  const setFormattedTimer = (value: string): void => {
-    setTimer(Number(value))
-    if (subtask) {
-      onUpdated({ name, timer: Number(value), createdAt: subtask.createdAt, id: subtask.id })
-    }
+  const [formattedTime, setFormattedTime] = useState<string>(stringifyTime(time))
+
+  useEffect(() => {
+    const updatedSubtask = new Subtask({ name, time, id: subtask?.id })
+    onUpdated(updatedSubtask)
+  }, [name, time])
+
+  const setUpdatedTime = (value: string): void => {
+    setFormattedTime(value)
+    const seconds = parseTimeFromString(value)
+    setTime(seconds)
   }
 
   const setUpdatedName = (value: string): void => {
     setName(value)
-    if (subtask) {
-      onUpdated({ name: value, timer, createdAt: subtask.createdAt, id: subtask.id })
-    }
   }
 
   return (
-    <View className={'flex flex-row gap-2 items-center mb-2'}>
+    <View className={'flex flex-row gap-2 mb-2 items-center justify-center'}>
 
       <TextInput
         value={name}
         onChangeText={setUpdatedName}
         placeholder={'Task'}
-        className={'bg-amber-50 border border-violet-100 text-gray-900 rounded block basis-2/4 grow px-2 py-1 shadow-sm'}
+        className={'bg-amber-50 border border-violet-100 text-gray-900 rounded block grow px-2 py-1 shadow-sm'}
       />
 
       <TextInput
-        value={timer.toString()}
-        onChangeText={setFormattedTimer}
+        value={formattedTime}
+        onChangeText={setUpdatedTime}
         placeholder={'0m 0s'}
-        className={'bg-amber-50 border border-violet-100 text-gray-900 rounded block basis-1/4 px-2 py-1 shadow-sm'}
+        className={'bg-amber-50 border border-violet-100 text-gray-900 rounded block px-2 py-1 basis-1/5 shadow-sm'}
       />
 
-      <IonicIcon
-        onPress={mainAction}
-        name={isAdd ? 'add' : 'remove-outline'}
-        size={19}
+      <CButton
+        onPress={removeAction}
+        small={true}
+        icon={'remove-outline'}
+        iconSize={14}
+        customClass={'mt-2 ml-2'}
       />
 
     </View>
