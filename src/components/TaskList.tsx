@@ -1,18 +1,31 @@
 import { View, Text } from 'react-native'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { GlobalContext } from '../context/GlobalContext'
 import { type Subtask } from '../models/Main'
 import { stringifyTime } from '../utils/timeUtils'
 
 const TaskList = (): any => {
-  const { activeTask } = useContext(GlobalContext)
-  const recentSubtasks = activeTask?.subtasks.slice(-5).reverse()
+  const { activeTask, seconds } = useContext(GlobalContext)
+  const [recent, setRecent] = useState<Subtask[]>([])
+
+  useEffect(() => {
+    // Slice the first five subtasks, but don't reverse them yet
+    const firstFive = activeTask?.subtasks.slice(0, 5) ?? []
+    // Check if the first subtask (in the original order) has passed its time
+    if (firstFive.length > 0 && firstFive[0].time <= seconds) {
+      // Remove the first subtask
+      firstFive.shift()
+    }
+    // Reverse the array for display
+    const updated = firstFive.reverse()
+    setRecent(updated)
+  }, [activeTask?.subtasks, seconds])
 
   const getSpecificClass = (idx: number): Record<string, string> => {
-    if (!recentSubtasks?.length) return { container: '', text: '' }
+    if (!recent?.length) return { container: '', text: '' }
 
-    const lastIdx = recentSubtasks.length - 1
+    const lastIdx = recent.length - 1
     switch (idx) {
       case lastIdx:
         // Style for the last (most recent) item
@@ -53,7 +66,7 @@ const TaskList = (): any => {
 
   return (
     <View className={'w-full mt-auto px-3'}>
-      {recentSubtasks?.map((item: Subtask, idx: number) => {
+      {recent?.map((item: Subtask, idx: number) => {
         const specificClass = getSpecificClass(idx)
         return (
           <View key={item.id} className={`flex flex-row justify-between p-1 px-2 ${specificClass.container}`}>

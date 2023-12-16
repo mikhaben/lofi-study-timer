@@ -24,10 +24,6 @@ export class Task {
     this.createdAt = task.createdAt ?? new Date().toISOString()
     this.subtasks = task.subtasks ?? []
   }
-
-  public getFormattedCreateDate (): string {
-    return this.createdAt
-  }
 }
 
 export class Subtask {
@@ -43,9 +39,5 @@ export class Subtask {
     this.time = subtask.time ?? 0
     this.completedTime = subtask.completedTime
     this.createdAt = subtask.createdAt ?? new Date().toISOString()
-  }
-
-  public getFormattedTimer (): string {
-    return this.time.toString()
   }
 }
