@@ -3,13 +3,15 @@ import React from 'react'
 import IonicIcon from '@expo/vector-icons/Ionicons'
 
 interface ButtonProps {
-  onPress: () => void
   title?: string
   icon?: string | any
   iconSize?: number
   disabled?: boolean
   small?: boolean
   customClass?: string
+  onPress?: () => void
+  onPressIn?: () => void
+  onPressOut?: () => void
 }
 
 const CButton = (props: ButtonProps): any => {
@@ -23,7 +25,10 @@ const CButton = (props: ButtonProps): any => {
         ${props.customClass ?? ''}
         shadow-sm flex justify-center items-center`
       }
-      onPress={props.disabled ? undefined : props.onPress}
+      onPress={props.onPress}
+      onPressIn={props.onPressIn}
+      onPressOut={props.onPressOut}
+      disabled={props.disabled}
     >
       {props.icon && <IonicIcon name={props.icon} size={iconSize}/> }
       {props.title && <Text className="font-bold uppercase text-lg">{props.title}</Text>}

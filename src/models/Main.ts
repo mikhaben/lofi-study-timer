@@ -3,11 +3,13 @@ import IdGenerator from '../utils/IdGenerator'
 export interface ITimer {
   running: boolean
   seconds: number
-  formatted: {
-    hours: number
-    minutes: number
-    seconds: number
-  }
+  formatted: IFormattedTime
+}
+
+export interface IFormattedTime {
+  hours: number
+  minutes: number
+  seconds: number
 }
 
 export class Task {

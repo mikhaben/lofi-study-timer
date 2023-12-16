@@ -9,9 +9,11 @@ interface InputGroupProps {
   subtask?: Subtask
   removeAction: () => void
   onUpdated: (subtask: Subtask) => void
+  onPressIn: () => void
+  onPressOut: () => void
 }
 
-const InputGroup = ({ subtask, removeAction, onUpdated }: InputGroupProps): React.ReactNode => {
+const InputGroup = ({ subtask, removeAction, onPressIn, onPressOut, onUpdated }: InputGroupProps): React.ReactNode => {
   const [name, setName] = useState(subtask?.name ?? '')
   const [time, setTime] = useState(subtask?.time ?? 0)
 
@@ -55,6 +57,15 @@ const InputGroup = ({ subtask, removeAction, onUpdated }: InputGroupProps): Reac
         icon={'remove-outline'}
         iconSize={14}
         customClass={'mt-2 ml-2'}
+      />
+
+      <CButton
+        small={true}
+        icon={'swap-vertical-outline'}
+        iconSize={14}
+        customClass={'mt-2 ml-2'}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
       />
 
     </View>

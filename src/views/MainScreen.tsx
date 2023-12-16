@@ -4,13 +4,12 @@ import React, { useState } from 'react'
 import Controllers from '../components/Controllers'
 import Menu from '../components/Menu'
 import TaskList from '../components/TaskList'
-import useTimer from '../hooks/useTimer'
-import BigClockFace from '../components/ClockFace/BigClockFace'
+import BigClockFace from '../components/BigClockFace'
+import { GlobalProvider } from '../context/GlobalContext'
 
 import TaskListManage from './TaskListManage'
 
 const MainScreen = (): React.ReactNode => {
-  const { running, seconds, formatted, toggleRunning, resetTimer } = useTimer()
   const [toggleList, setToggleList] = useState<boolean>(false)
 
   const toggleListAction = (): void => {
@@ -18,24 +17,20 @@ const MainScreen = (): React.ReactNode => {
   }
 
   return (
-    <View className="flex-1 items-center justify-center w-full relative">
-      <Menu />
-      <BigClockFace formatted={formatted} />
-      <TaskList />
-      <TaskListManage
-        closeAction={toggleListAction}
-        running={running}
-        formatted={formatted}
-        visible={toggleList}
-      />
-      <Controllers
-        playAction={toggleRunning}
-        resetAction={resetTimer}
-        listAction={toggleListAction}
-        running={running}
-        seconds={seconds}
-      />
-    </View>
+    <GlobalProvider>
+      <View className="flex-1 items-center justify-center w-full relative">
+        <Menu />
+        <BigClockFace />
+        <TaskList />
+        <TaskListManage
+          visible={toggleList}
+          closeAction={toggleListAction}
+        />
+        <Controllers
+          listAction={toggleListAction}
+        />
+      </View>
+    </GlobalProvider>
   )
 }
 

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { ScrollView, TextInput, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
+import DragList, { type DragListRenderItemInfo } from 'react-native-draglist'
 
 import { Subtask, Task } from '../../models/Main'
 import { TaskListManageContext } from '../../context/TaskListManagerContext'
@@ -66,9 +67,35 @@ const Editor = (): React.ReactNode => {
     setSubtasks(updatedSubtasks)
   }
 
+  function keyExtractor (item: Subtask): string {
+    return item.id.toString()
+  }
+
+  function renderItem (info: DragListRenderItemInfo<Subtask>): React.ReactNode {
+    const { item, onDragStart, onDragEnd } = info
+
+    return (
+      <InputGroup
+        subtask={item}
+        onUpdated={updateSubtask}
+        removeAction={removeAction.bind(this, item)}
+        onPressIn={onDragStart}
+        onPressOut={onDragEnd}
+      />
+    )
+  }
+
+  async function onReordered (fromIndex: number, toIndex: number): Promise<void> {
+    const copy = [...subtasks] // Don't modify react data in-place
+    const removed = copy.splice(fromIndex, 1)
+
+    copy.splice(toIndex, 0, removed[0]) // Now insert at the new pos
+    setSubtasks(copy)
+  }
+
   return (
     <FadeInView>
-      <ScrollView className={'flex flex-col mb-10 px-3'}>
+      <View className={'flex flex-col mb-10 px-3'}>
 
         <View className={'flex flex-row items-center justify-center mb-3'}>
           <TextInput
@@ -86,15 +113,17 @@ const Editor = (): React.ReactNode => {
           />
         </View>
 
-        {subtasks.map((subtask) => (
-          <InputGroup
-            key={subtask.id}
-            subtask={subtask}
-            onUpdated={updateSubtask}
-            removeAction={removeAction.bind(this, subtask)}
-          />
-        ))}
-      </ScrollView>
+        <Text className={'text-xs text-gray-600 px-2 mb-2'}>
+          New items will appear at the bottom, you can drag and drop to reorder them
+        </Text>
+
+        <DragList
+          data={subtasks}
+          keyExtractor={keyExtractor}
+          onReordered={onReordered}
+          renderItem={renderItem}
+        />
+      </View>
     </FadeInView>
   )
 }
