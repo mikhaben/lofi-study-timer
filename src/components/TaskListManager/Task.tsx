@@ -1,23 +1,40 @@
-import React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { Animated, Pressable, Text, View } from 'react-native'
 import IonicIcon from '@expo/vector-icons/Ionicons'
 
 import { type Task } from '../../models/Main'
 
 interface TaskProps {
   task: Task
+  active?: boolean
   onDelete?: () => void
   onEdit?: () => void
 }
 
 const TaskView = (props: TaskProps): React.ReactNode => {
+  const scaleAnim = useRef(new Animated.Value(1)).current
+
+  useEffect(() => {
+    Animated.timing(scaleAnim, {
+      toValue: props.active ? 1.04 : 1,
+      duration: 300,
+      useNativeDriver: true
+    }).start()
+  }, [props.active])
+
   return (
-    <View className={'flex flex-row rounded px-3 mx-3 py-2 mb-2 justify-between bg-amber-50 shadow'}>
+    <Animated.View
+      className={`
+        flex flex-row rounded-xl px-3 mx-3 py-2 mb-2 justify-between bg-amber-50 shadow border-4 border-amber-50
+        ${props.active ? 'border-4 border-violet-100' : ''}
+      `}
+      style={{ transform: [{ scale: scaleAnim }] }}
+    >
       {/* Task */}
       <View className={'flex flex-col'}>
         <View className={'flex flex-row items-center'}>
-          <Text className={'text-green-700 font-bold'}>20%</Text>
-          <Text className={'font-bold'}> | </Text>
+          {/* <Text className={'text-green-700 font-bold'}>20%</Text> */}
+          {/* <Text className={'font-bold'}> | </Text> */}
           <Text className={'font-semibold text-base'}>{props.task.name}</Text>
         </View>
         <Text className={'text-gray-600 text-xs'}>Created: {props.task.createdAt}</Text>
@@ -31,7 +48,7 @@ const TaskView = (props: TaskProps): React.ReactNode => {
           <IonicIcon name={'pencil-outline'} className={'text-xs'} size={17} />
         </Pressable>
       </View>
-    </View>
+    </Animated.View>
   )
 }
 

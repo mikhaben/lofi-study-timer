@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, View, Text } from 'react-native'
+import { View } from 'react-native'
 
 import List from '../components/TaskListManager/List'
 import Editor from '../components/TaskListManager/Editor'
 import CButton from '../components/CButton'
 import CModal from '../components/CModal'
 import SmallClockFace from '../components/ClockFace/SmallClockFace'
-import { Subtask, Task } from '../models/Main'
+import { type Task } from '../models/Main'
 import StorageService from '../services/StorageService'
 import { TaskListManageContext } from '../context/TaskListManagerContext'
 
@@ -20,6 +20,7 @@ interface TaskListManageProps {
 const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
   const [isList, setIsList] = useState<boolean>(true)
   const [pickedTask, setPickedTask] = useState<Task | undefined>()
+  const [activeTask, setActiveTask] = useState<Task | undefined>()
   const [tasks, setTasks] = useState<Task[]>([])
 
   useEffect(() => {
@@ -29,6 +30,10 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
     }
     fetchTasks().catch(console.error)
   }, [props.visible])
+
+  const setAsActive = (task: Task): void => {
+    setActiveTask(task)
+  }
 
   const removeTask = async (id: number): Promise<void> => {
     const updated = tasks.filter((item: Task) => item.id !== id)
@@ -70,17 +75,6 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
     await StorageService.storeTask(task)
   }
 
-  const addTestTask = async (): Promise<void> => {
-    const newTask = new Task({
-      name: 'test',
-      subtasks: [
-        new Subtask({ name: 'test', time: 100 }),
-        new Subtask({ name: 'test', time: 233000 })
-      ]
-    })
-    await addTask(newTask)
-  }
-
   return (
     <CModal
       visible={props.visible}
@@ -102,18 +96,16 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
           {props.running && <View className={'pl-4'}>
             <SmallClockFace formatted={props.formatted} running={props.running} />
           </View>}
-          {/* <Pressable onPress={closeModal} className={'ml-auto px-4'}> */}
-          {/*   <IonicIcon name={'chevron-down-outline'} size={19} /> */}
-          {/* </Pressable> */}
         </View>
-        <Pressable onPress={addTestTask}><Text>ADD</Text></Pressable>
 
         {/* List, Editor */}
         <TaskListManageContext.Provider value={{
           removeTask,
           addTask,
           pickTask,
+          setAsActive,
           pickedTask,
+          activeTask,
           tasks
         }}>
           {isList ? <List /> : <Editor />}

@@ -6,6 +6,8 @@ interface ITaskListManageContext {
   removeTask: (id: number) => void
   addTask: (task: Task) => void
   pickTask: (task: Task) => void
+  setAsActive: (task: Task) => void
+  activeTask?: Task
   pickedTask?: Task
   tasks?: Task[]
 }
@@ -13,5 +15,6 @@ interface ITaskListManageContext {
 export const TaskListManageContext = createContext<ITaskListManageContext>({
   removeTask: () => {},
   addTask: () => {},
-  pickTask: () => {}
+  pickTask: () => {},
+  setAsActive: () => {}
 })

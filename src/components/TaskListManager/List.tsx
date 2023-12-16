@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { Pressable, ScrollView, Text, View } from 'react-native'
 
 import TaskView from '../../components/TaskListManager/Task'
 import { type Task } from '../../models/Main'
@@ -9,8 +9,10 @@ import FadeInView from '../FadeInView'
 const List = (): React.ReactNode => {
   const {
     tasks,
+    activeTask,
     pickTask,
-    removeTask
+    removeTask,
+    setAsActive
   } = useContext(TaskListManageContext)
 
   return (
@@ -24,12 +26,14 @@ const List = (): React.ReactNode => {
         }
 
         {tasks?.map((item: Task) => (
-          <TaskView
-            key={item.id}
-            task={item}
-            onEdit={pickTask.bind(this, item)}
-            onDelete={removeTask.bind(this, item.id)}
-          />
+          <Pressable onPress={setAsActive.bind(this, item)} key={item.id}>
+            <TaskView
+              task={item}
+              active={activeTask?.id === item.id}
+              onEdit={pickTask.bind(this, item)}
+              onDelete={removeTask.bind(this, item.id)}
+            />
+          </Pressable>
         ))}
       </ScrollView>
     </FadeInView>
