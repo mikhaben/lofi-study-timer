@@ -1,10 +1,10 @@
 import React, { memo, useContext } from 'react'
 import { Text, View } from 'react-native'
 
-import { GlobalContext } from '../context/GlobalContext'
+import { TimerContext } from '../context/TimerProvider'
 
 const BigClockFace = (): React.ReactNode => {
-  const { formatted } = useContext(GlobalContext)
+  const { formatted } = useContext(TimerContext)
 
   return (
     <View className={'w-full h-auto flex flex-row justify-end'}>

@@ -8,8 +8,9 @@ import CModal from '../components/CModal'
 import { type Task } from '../models/Main'
 import StorageService from '../services/StorageService'
 import { TaskListManageContext } from '../context/TaskListManagerContext'
-import { GlobalContext } from '../context/GlobalContext'
 import { stringifyTime } from '../utils/timeUtils'
+import { TimerContext } from '../context/TimerProvider'
+import { TaskContext } from '../context/TaskProvider'
 
 interface TaskListManageProps {
   visible: boolean
@@ -21,7 +22,8 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
   const [pickedTask, setPickedTask] = useState<Task | undefined>()
   const [tasks, setTasks] = useState<Task[]>([])
 
-  const { setActiveTask, activeTask, running, seconds } = useContext(GlobalContext)
+  const { running, seconds } = useContext(TimerContext)
+  const { setActiveTask, activeTask } = useContext(TaskContext)
 
   useEffect(() => {
     const fetchTasks = async (): Promise<void> => {

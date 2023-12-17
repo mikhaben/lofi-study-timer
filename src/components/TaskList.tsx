@@ -1,14 +1,17 @@
 import { View, Text } from 'react-native'
 import { useContext, useEffect, useState } from 'react'
 
-import { GlobalContext } from '../context/GlobalContext'
 import { type Subtask } from '../models/Main'
 import { stringifyTime } from '../utils/timeUtils'
+import { TimerContext } from '../context/TimerProvider'
+import { TaskContext } from '../context/TaskProvider'
 
 import FadeInView from './FadeInView'
 
 const TaskList = (): any => {
-  const { activeTask, seconds, running, toggleRunning, resetTimer } = useContext(GlobalContext)
+  const { seconds, running, toggleRunning, resetTimer } = useContext(TimerContext)
+  const { activeTask } = useContext(TaskContext)
+
   const [recent, setRecent] = useState<Subtask[]>([])
   const [total, setTotal] = useState<number>(0)
   const [completed, setCompleted] = useState<boolean>(false)
@@ -116,6 +119,8 @@ const TaskList = (): any => {
           </FadeInView>
         )
       })}
+
+      {!activeTask && <Text className={'ml-auto px-2 text-violet-900 font-semibold'}>No tasks selected</Text>}
       {activeTask && <Text className={'ml-auto px-2 text-violet-900 font-semibold'}>
         {total > 0 ? `Remaining: ${stringifyTime(total)}` : 'You have all done, great success!'}
       </Text>}

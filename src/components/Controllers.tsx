@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { useContext } from 'react'
 
-import { GlobalContext } from '../context/GlobalContext'
+import { TimerContext } from '../context/TimerProvider'
 
 import CButton from './CButton'
 
@@ -10,7 +10,7 @@ interface ControllersProps {
 }
 
 const Controllers = ({ listAction }: ControllersProps): any => {
-  const { running, seconds, resetTimer, toggleRunning } = useContext(GlobalContext)
+  const { running, seconds, resetTimer, toggleRunning } = useContext(TimerContext)
   return (
     <View className="flex flex-row justify-center w-full pt-14 pb-3">
       <CButton onPress={listAction} title="L" disabled={false}/>

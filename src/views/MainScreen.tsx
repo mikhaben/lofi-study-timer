@@ -5,7 +5,7 @@ import Controllers from '../components/Controllers'
 import Menu from '../components/Menu'
 import TaskList from '../components/TaskList'
 import BigClockFace from '../components/BigClockFace'
-import { GlobalProvider } from '../context/GlobalContext'
+import GlobalProvider from '../context/GlobalProvider'
 
 import TaskListManage from './TaskListManage'
 
