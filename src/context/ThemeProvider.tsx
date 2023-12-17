@@ -1,41 +1,42 @@
 import React, { createContext, useState } from 'react'
 
+import { type ITheme, ThemeNames, Themes } from '../models/Theme'
+
 interface ThemeProviderProps {
   children: React.ReactNode
 }
 
-export enum Theme {
-  VIOLET = 'violet',
-  AMBER = 'amber',
-  PINK = 'pink'
-}
-
 interface ThemeContextProps {
-  theme: Theme
+  theme: ITheme
+  themeName: ThemeNames
   toggleTheme: () => void
 }
 
 const defaultContext: ThemeContextProps = {
-  theme: Theme.VIOLET,
+  theme: Themes[ThemeNames.VIOLET],
+  themeName: ThemeNames.VIOLET,
   toggleTheme: () => {}
 }
 
 export const ThemeContext = createContext<ThemeContextProps>(defaultContext)
 
 export const ThemeProvider = ({ children }: ThemeProviderProps): React.ReactNode => {
-  const [theme, setTheme] = useState<Theme>(Theme.VIOLET)
+  const [themeName, setThemeName] = useState<ThemeNames>(ThemeNames.VIOLET)
+  const [theme, setTheme] = useState<ITheme>(Themes[themeName])
 
   const toggleTheme = (): void => {
     // Get all theme values except the current one
-    const themes = Object.values(Theme).filter(t => t !== theme)
+    const themes = Object.values(ThemeNames).filter(t => t !== themeName)
     // Randomly select a new theme
     const newTheme = themes[Math.floor(Math.random() * themes.length)]
     // Set the new theme
-    setTheme(newTheme)
+    setThemeName(newTheme)
+    setTheme(Themes[newTheme])
+    console.log(`Theme changed to ${newTheme}`)
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, themeName, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   )

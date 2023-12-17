@@ -1,36 +1,17 @@
-import LottieView, { type AnimationObject } from 'lottie-react-native'
+import LottieView from 'lottie-react-native'
 import React from 'react'
 import { View } from 'react-native'
 
-interface Splash {
-  id: string
-  name: string
-  file: AnimationObject
-  colorClass: string
-  speed?: number
-}
-
-const Splashes: Splash[] = [
-  {
-    name: 'work guy',
-    file: require('../assets/lottie/work-guy.json'),
-    id: '1',
-    colorClass: 'bg-amber-50',
-    speed: 0.4
-  },
-  {
-    name: 'chill on bad',
-    file: require('../assets/lottie/chill-on-bad.json'),
-    id: '1',
-    colorClass: 'bg-cyan-50'
-  }
-]
+import { ThemeNames, Themes } from '../models/Theme'
 
 const BgSplash = (): React.ReactNode => {
-  const splash: Splash = Splashes[0]
+  const theme = Themes[ThemeNames.VIOLET]
+  const splash = theme.splash
+  const colorClass = theme.backgroundColor
+  console.log(colorClass)
 
   return (
-    <View className={`absolute w-full h-full ${splash.colorClass}`}>
+    <View className={`absolute w-full h-full ${colorClass}`}>
       <LottieView
         source={splash.file}
         autoPlay
