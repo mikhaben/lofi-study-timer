@@ -6,6 +6,7 @@ import { Subtask, Task } from '../../models/Main'
 import { TaskListManageContext } from '../../context/TaskListManagerContext'
 import FadeInView from '../FadeInView'
 import CButton from '../CButton'
+import { stringifyTime } from '../../utils/timeUtils'
 
 import InputGroup from './InputGroup'
 
@@ -17,10 +18,16 @@ const Editor = (): React.ReactNode => {
 
   const [subtasks, setSubtasks] = useState(pickedTask?.subtasks ?? [])
   const [name, setName] = useState(pickedTask?.name ?? '')
+  const [totalTime, setTotalTime] = useState<number>(0)
   // useRef is used to keep the value of subtasks in memory
   // when the component is unmounted
   const subtasksRef = useRef(subtasks)
   const nameRef = useRef(name)
+
+  useEffect(() => {
+    const totalTime = subtasks.reduce((acc, item) => acc + item.time, 0)
+    setTotalTime(totalTime)
+  }, [subtasks])
 
   useEffect(() => {
     nameRef.current = name
@@ -112,6 +119,8 @@ const Editor = (): React.ReactNode => {
             customClass={'ml-2 w-9 h-9'}
           />
         </View>
+
+        {totalTime > 0 && <Text className={'text-gray-600 px-2 pb-1'}>Total time: {stringifyTime(totalTime)}</Text>}
 
         <Text className={'text-xs text-gray-600 px-2 mb-2'}>
           New items will appear at the bottom, you can drag and drop to reorder them

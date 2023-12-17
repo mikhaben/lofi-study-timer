@@ -96,7 +96,7 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
         {/* Timer */}
         <View className={'flex flex-row justify-between pb-3 pt-1 mx-3'}>
           {running && <View className={'pl-4 flex flex-row gap-2'}>
-            {/* <Text>{activeTask?.name}:</Text> */}
+            <Text>{activeTask?.name}:</Text>
             <Text>{stringifyTime(seconds)}</Text>
           </View>}
         </View>
