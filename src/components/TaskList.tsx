@@ -8,38 +8,58 @@ import { stringifyTime } from '../utils/timeUtils'
 import FadeInView from './FadeInView'
 
 const TaskList = (): any => {
-  const { activeTask, seconds, toggleRunning } = useContext(GlobalContext)
+  const { activeTask, seconds, running, toggleRunning, resetTimer } = useContext(GlobalContext)
   const [recent, setRecent] = useState<Subtask[]>([])
   const [total, setTotal] = useState<number>(0)
+  const [completed, setCompleted] = useState<boolean>(false)
 
   useEffect(() => {
-    if (!activeTask?.subtasks || activeTask.subtasks.length === 0) {
-      setRecent([])
+    // reset the timer if the active task changes
+    if (running) resetTimer()
+    setCompleted(false)
+    calculateRemainingTime()
+  }, [activeTask])
+
+  useEffect(() => {
+    // if the timer is reset, reset the completed state
+    const isTask = activeTask && activeTask?.subtasks?.length > 0
+    const isReset = seconds === 0 && !running && completed
+    if (isTask && isReset) {
+      setCompleted(false)
       setTotal(0)
-      return
+      calculateRemainingTime()
     }
 
+    if (completed) return
+
+    calculateRemainingTime()
+  }, [seconds])
+
+  const calculateRemainingTime = (): void => {
+    const updatedSubtasks: Subtask[] = []
     let cumulativeTime = 0
     let totalRemainingTime = 0
-    let timeSubtracted = false
-    const updatedSubtasks: Subtask[] = []
+
+    if (!activeTask) return
 
     for (const subtask of activeTask.subtasks) {
       cumulativeTime += subtask.time
       if (cumulativeTime > seconds) {
-        if (!timeSubtracted) {
-          totalRemainingTime += (cumulativeTime - seconds)
-          timeSubtracted = true
-        } else {
-          totalRemainingTime += subtask.time
-        }
+        totalRemainingTime += (cumulativeTime > seconds && updatedSubtasks.length === 0)
+          ? cumulativeTime - seconds
+          : subtask.time
         updatedSubtasks.push(subtask)
       }
     }
 
     setTotal(totalRemainingTime)
     setRecent(updatedSubtasks.slice(0, 5).reverse())
-  }, [activeTask?.subtasks, seconds])
+
+    if (totalRemainingTime === 0) {
+      toggleRunning()
+      setCompleted(true)
+    }
+  }
 
   const getSpecificClass = (idx: number): Record<string, string> => {
     if (!recent?.length) return { container: '', text: '' }
@@ -96,9 +116,9 @@ const TaskList = (): any => {
           </FadeInView>
         )
       })}
-      <Text className={'ml-auto px-2 text-violet-900 font-semibold'}>
+      {activeTask && <Text className={'ml-auto px-2 text-violet-900 font-semibold'}>
         {total > 0 ? `Remaining: ${stringifyTime(total)}` : 'You have all done, great success!'}
-      </Text>
+      </Text>}
     </View>
   )
 }
