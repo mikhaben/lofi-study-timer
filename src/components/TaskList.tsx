@@ -5,21 +5,40 @@ import { GlobalContext } from '../context/GlobalContext'
 import { type Subtask } from '../models/Main'
 import { stringifyTime } from '../utils/timeUtils'
 
+import FadeInView from './FadeInView'
+
 const TaskList = (): any => {
-  const { activeTask, seconds } = useContext(GlobalContext)
+  const { activeTask, seconds, toggleRunning } = useContext(GlobalContext)
   const [recent, setRecent] = useState<Subtask[]>([])
+  const [total, setTotal] = useState<number>(0)
 
   useEffect(() => {
-    // Slice the first five subtasks, but don't reverse them yet
-    const firstFive = activeTask?.subtasks.slice(0, 5) ?? []
-    // Check if the first subtask (in the original order) has passed its time
-    if (firstFive.length > 0 && firstFive[0].time <= seconds) {
-      // Remove the first subtask
-      firstFive.shift()
+    if (!activeTask?.subtasks || activeTask.subtasks.length === 0) {
+      setRecent([])
+      setTotal(0)
+      return
     }
-    // Reverse the array for display
-    const updated = firstFive.reverse()
-    setRecent(updated)
+
+    let cumulativeTime = 0
+    let totalRemainingTime = 0
+    let timeSubtracted = false
+    const updatedSubtasks: Subtask[] = []
+
+    for (const subtask of activeTask.subtasks) {
+      cumulativeTime += subtask.time
+      if (cumulativeTime > seconds) {
+        if (!timeSubtracted) {
+          totalRemainingTime += (cumulativeTime - seconds)
+          timeSubtracted = true
+        } else {
+          totalRemainingTime += subtask.time
+        }
+        updatedSubtasks.push(subtask)
+      }
+    }
+
+    setTotal(totalRemainingTime)
+    setRecent(updatedSubtasks.slice(0, 5).reverse())
   }, [activeTask?.subtasks, seconds])
 
   const getSpecificClass = (idx: number): Record<string, string> => {
@@ -69,12 +88,17 @@ const TaskList = (): any => {
       {recent?.map((item: Subtask, idx: number) => {
         const specificClass = getSpecificClass(idx)
         return (
-          <View key={item.id} className={`flex flex-row justify-between p-1 px-2 ${specificClass.container}`}>
-            <Text className={`text-right ${specificClass.text}`}>{item.name}</Text>
-            <Text className={'text-right'}>{stringifyTime(item.time)}</Text>
-          </View>
+          <FadeInView key={item.id}>
+            <View className={`flex flex-row justify-between p-1 px-2 ${specificClass.container}`}>
+              <Text className={`text-right ${specificClass.text}`}>{item.name}</Text>
+              <Text className={'text-right'}>{stringifyTime(item.time)}</Text>
+            </View>
+          </FadeInView>
         )
       })}
+      <Text className={'ml-auto px-2 text-violet-900 font-semibold'}>
+        {total > 0 ? `Remaining: ${stringifyTime(total)}` : 'You have all done, great success!'}
+      </Text>
     </View>
   )
 }
