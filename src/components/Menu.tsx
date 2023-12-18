@@ -6,7 +6,7 @@ import { ThemeContext } from '../context/ThemeProvider'
 
 const Menu = (): any => {
   const [isButtonBlocked, setIsButtonBlocked] = useState(false)
-  const { toggleTheme } = useContext(ThemeContext)
+  const { toggleTheme, theme } = useContext(ThemeContext)
 
   const handleToggleTheme = (): void => {
     if (isButtonBlocked) return
@@ -16,18 +16,18 @@ const Menu = (): any => {
 
     setTimeout(() => {
       setIsButtonBlocked(false)
-    }, 1200)
+    }, 1000)
   }
 
   return (
     <View className={'flex flex-row justify-end p-5 w-full items-center space-x-6'}>
 
-      <Pressable>
-        <Text className={'text-base'}>Timer</Text>
-      </Pressable>
+      {/* <Pressable> */}
+      {/*   <Text className={'text-base'}>Timer</Text> */}
+      {/* </Pressable> */}
 
       <Pressable>
-        <Text className={'text-base text-violet-900'}>Sprint</Text>
+        <Text className={`text-base ${theme.accentTextColor}`}>Sprint</Text>
       </Pressable>
 
       <Pressable>

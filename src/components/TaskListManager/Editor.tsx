@@ -9,12 +9,11 @@ import CButton from '../CButton'
 import { stringifyTime } from '../../utils/timeUtils'
 
 import InputGroup from './InputGroup'
+import { ThemeContext } from '../../context/ThemeProvider'
 
 const Editor = (): React.ReactNode => {
-  const {
-    addTask,
-    pickedTask
-  } = useContext(TaskListManageContext)
+  const { addTask, pickedTask } = useContext(TaskListManageContext)
+  const { theme } = useContext(ThemeContext)
 
   const [subtasks, setSubtasks] = useState(pickedTask?.subtasks ?? [])
   const [name, setName] = useState(pickedTask?.name ?? '')
@@ -109,7 +108,7 @@ const Editor = (): React.ReactNode => {
             value={name}
             onChangeText={setName}
             placeholder={'Title'}
-            className={'bg-amber-50 border border-violet-100 text-gray-900 rounded block grow px-2 py-2 shadow-sm'}
+            className={`bg-white ${theme.accentBorderColor} ${theme.textColor} border rounded block grow px-2 py-2 shadow-sm`}
           />
           <CButton
             onPress={addAction}
@@ -120,9 +119,9 @@ const Editor = (): React.ReactNode => {
           />
         </View>
 
-        {totalTime > 0 && <Text className={'text-gray-600 px-2 pb-1'}>Total time: {stringifyTime(totalTime)}</Text>}
+        {totalTime > 0 && <Text className={`${theme.secondaryTextColor} px-2 pb-1`}>Total time: {stringifyTime(totalTime)}</Text>}
 
-        <Text className={'text-xs text-gray-600 px-2 mb-2'}>
+        <Text className={`${theme.secondaryTextColor} text-xs px-2 mb-2`}>
           New items will appear at the bottom, you can drag and drop to reorder them
         </Text>
 

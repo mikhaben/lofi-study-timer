@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, TextInput } from 'react-native'
 
 import { Subtask } from '../../models/Main'
 import CButton from '../CButton'
 import { parseTimeFromString, stringifyTime } from '../../utils/timeUtils'
+import { ThemeContext } from '../../context/ThemeProvider'
 
 interface InputGroupProps {
   subtask?: Subtask
@@ -14,6 +15,8 @@ interface InputGroupProps {
 }
 
 const InputGroup = ({ subtask, removeAction, onPressIn, onPressOut, onUpdated }: InputGroupProps): React.ReactNode => {
+  const { theme } = useContext(ThemeContext)
+
   const [name, setName] = useState(subtask?.name ?? '')
   const [time, setTime] = useState(subtask?.time ?? 0)
 
@@ -41,14 +44,14 @@ const InputGroup = ({ subtask, removeAction, onPressIn, onPressOut, onUpdated }:
         value={name}
         onChangeText={setUpdatedName}
         placeholder={'Task'}
-        className={'bg-amber-50 border border-violet-100 text-gray-900 rounded block grow px-2 py-1 shadow-sm'}
+        className={`${theme.accentBorderColor} ${theme.textColor} bg-white border rounded block grow px-2 py-1 shadow-sm`}
       />
 
       <TextInput
         value={formattedTime}
         onChangeText={setUpdatedTime}
         placeholder={'0m 0s'}
-        className={'bg-amber-50 border border-violet-100 text-gray-900 rounded block px-2 py-1 basis-1/5 shadow-sm'}
+        className={`${theme.accentBorderColor} ${theme.textColor} bg-white border rounded block px-2 py-1 basis-1/5 shadow-sm`}
       />
 
       <CButton

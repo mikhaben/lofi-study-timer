@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { Animated, Pressable, Text, View } from 'react-native'
 import IonicIcon from '@expo/vector-icons/Ionicons'
 
 import { type Task } from '../../models/Main'
+import { ThemeContext } from '../../context/ThemeProvider'
 
 interface TaskProps {
   task: Task
@@ -13,6 +14,7 @@ interface TaskProps {
 
 const TaskView = (props: TaskProps): React.ReactNode => {
   const scaleAnim = useRef(new Animated.Value(1)).current
+  const { theme } = useContext(ThemeContext)
 
   useEffect(() => {
     Animated.timing(scaleAnim, {
@@ -25,8 +27,9 @@ const TaskView = (props: TaskProps): React.ReactNode => {
   return (
     <Animated.View
       className={`
-        flex flex-row rounded-xl px-3 mx-3 py-2 mb-2 justify-between bg-amber-50 shadow border-4 border-amber-50
-        ${props.active ? 'border-4 border-violet-100' : ''}
+        flex flex-row rounded-xl px-3 mx-3 py-2 mb-2 justify-between bg-amber-50 shadow border-4
+        ${theme.backgroundColor}
+        ${props.active ? theme.accentBorderColor : theme.borderColor}
       `}
       style={{ transform: [{ scale: scaleAnim }] }}
     >
@@ -37,7 +40,7 @@ const TaskView = (props: TaskProps): React.ReactNode => {
           {/* <Text className={'font-bold'}> | </Text> */}
           <Text className={'font-semibold text-base'}>{props.task.name}</Text>
         </View>
-        <Text className={'text-gray-600 text-xs'}>Created: {props.task.createdAt}</Text>
+        <Text className={`${theme.secondaryTextColor} text-xs`}>Created: {props.task.createdAt}</Text>
       </View>
       {/* Controls */}
       <View className={'flex flex-row items-center'}>

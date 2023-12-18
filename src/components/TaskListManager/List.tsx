@@ -5,8 +5,10 @@ import TaskView from '../../components/TaskListManager/Task'
 import { type Task } from '../../models/Main'
 import { TaskListManageContext } from '../../context/TaskListManagerContext'
 import FadeInView from '../FadeInView'
+import { ThemeContext } from '../../context/ThemeProvider'
 
 const List = (): React.ReactNode => {
+  const { theme } = useContext(ThemeContext)
   const {
     tasks,
     activeTask,
@@ -21,7 +23,7 @@ const List = (): React.ReactNode => {
         {!tasks?.length &&
           <View className={'mx-5'}>
             <Text className={'text-2xl text-center'}>No tasks for today</Text>
-            <Text className={'text-sm text-center text-violet-600'}>Enjoy this moment 😊</Text>
+            <Text className={`text-sm text-center ${theme.accentTextColor}`}>Enjoy this moment 😊</Text>
           </View>
         }
 

@@ -11,6 +11,7 @@ import { TaskListManageContext } from '../context/TaskListManagerContext'
 import { stringifyTime } from '../utils/timeUtils'
 import { TimerContext } from '../context/TimerProvider'
 import { TaskContext } from '../context/TaskProvider'
+import { ThemeContext } from '../context/ThemeProvider'
 
 interface TaskListManageProps {
   visible: boolean
@@ -22,6 +23,7 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
   const [pickedTask, setPickedTask] = useState<Task | undefined>()
   const [tasks, setTasks] = useState<Task[]>([])
 
+  const { theme } = useContext(ThemeContext)
   const { running, seconds } = useContext(TimerContext)
   const { setActiveTask, activeTask } = useContext(TaskContext)
 
@@ -91,7 +93,7 @@ const TaskListManage = (props: TaskListManageProps): React.ReactNode => {
       </View>
 
       {/* Content */}
-      <View className={'w-full h-4/5 py-2 rounded-2xl bg-amber-50'}>
+      <View className={`w-full h-4/5 py-2 rounded-2xl ${theme.backgroundColor}`}>
 
         {/* Timer */}
         <View className={'flex flex-row justify-between pb-3 pt-1 mx-3'}>

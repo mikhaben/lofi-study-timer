@@ -18,12 +18,20 @@ interface ButtonProps {
 
 const CButton = (props: ButtonProps): any => {
   const { theme } = useContext(ThemeContext)
+  const [newTheme, setNewTheme] = React.useState(theme)
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setNewTheme(theme)
+    }, 600)
+  }, [theme])
+
   const iconSize = props.iconSize ?? (props.small ? 14 : 21)
 
   return (
     <Pressable
       className={`
-        ${props.disabled ? theme.secondaryBackgroundColor : theme.accentBackgroundColor}
+        ${props.disabled ? newTheme.secondaryBackgroundColor : newTheme.accentBackgroundColor}
         ${props.small ? 'w-6 h-6 rounded-md' : 'w-12 h-12 rounded-2xl mx-3'}
         ${props.customClass ?? ''}
         shadow-sm flex justify-center items-center`

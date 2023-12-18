@@ -5,12 +5,14 @@ import { type Subtask } from '../models/Main'
 import { stringifyTime } from '../utils/timeUtils'
 import { TimerContext } from '../context/TimerProvider'
 import { TaskContext } from '../context/TaskProvider'
+import { ThemeContext } from '../context/ThemeProvider'
 
 import FadeInView from './FadeInView'
 
 const TaskList = (): any => {
   const { seconds, running, toggleRunning, resetTimer } = useContext(TimerContext)
   const { activeTask } = useContext(TaskContext)
+  const { theme } = useContext(ThemeContext)
 
   const [recent, setRecent] = useState<Subtask[]>([])
   const [total, setTotal] = useState<number>(0)
@@ -120,8 +122,8 @@ const TaskList = (): any => {
         )
       })}
 
-      {!activeTask && <Text className={'ml-auto px-2 text-violet-900 font-semibold'}>No tasks selected</Text>}
-      {activeTask && <Text className={'ml-auto px-2 text-violet-900 font-semibold'}>
+      {!activeTask && <Text className={`ml-auto px-2 font-semibold ${theme.accentTextColor}`}>No tasks selected</Text>}
+      {activeTask && <Text className={`ml-auto px-2 font-semibold ${theme.accentTextColor}`}>
         {total > 0 ? `Remaining: ${stringifyTime(total)}` : 'You have all done, great success!'}
       </Text>}
     </View>

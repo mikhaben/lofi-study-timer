@@ -59,15 +59,15 @@ export const Themes: IThemes = {
     },
 
     textColor: 'text-black',
-    accentTextColor: 'text-amber-900',
-    secondaryTextColor: 'text-gray-600',
+    accentTextColor: 'text-green-900',
+    secondaryTextColor: 'text-gray-700',
 
-    backgroundColor: 'bg-lime-50',
+    backgroundColor: 'bg-rose-50',
     accentBackgroundColor: 'bg-lime-600',
     secondaryBackgroundColor: 'bg-gray-300',
 
-    borderColor: 'border-violet-50',
-    accentBorderColor: 'border-amber-100'
+    borderColor: 'border-rose-50',
+    accentBorderColor: 'border-lime-100'
   },
   [ThemeNames.PINK]: {
     splash: {
