@@ -85,6 +85,7 @@
         "@typescript-eslint/no-misused-promises": ["error", {
             "checksVoidReturn": false
         }],
-        "@typescript-eslint/no-extraneous-class": "off"
+        "@typescript-eslint/no-extraneous-class": "off",
+        "react-native/no-inline-styles": 0
     }
 }

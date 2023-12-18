@@ -1,22 +1,26 @@
 import LottieView from 'lottie-react-native'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View } from 'react-native'
 
-import { ThemeNames, Themes } from '../models/Theme'
+import { ThemeContext } from '../context/ThemeProvider'
 
 const BgSplash = (): React.ReactNode => {
-  const theme = Themes[ThemeNames.VIOLET]
-  const splash = theme.splash
-  const colorClass = theme.backgroundColor
-  console.log(colorClass)
+  const { theme } = useContext(ThemeContext)
+  const [bgColor, setBgColor] = useState(theme.backgroundColor)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setBgColor(theme.backgroundColor)
+    }, 600)
+  }, [theme])
 
   return (
-    <View className={`absolute w-full h-full ${colorClass}`}>
+    <View className={`absolute w-full h-full ${bgColor}`}>
       <LottieView
-        source={splash.file}
+        source={theme.splash.file}
         autoPlay
         loop
-        speed={splash.speed ?? 1}
+        speed={theme.splash.speed ?? 1}
       />
     </View>
   )

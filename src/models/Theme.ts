@@ -62,7 +62,7 @@ export const Themes: IThemes = {
     accentTextColor: 'text-amber-900',
     secondaryTextColor: 'text-gray-600',
 
-    backgroundColor: 'bg-violet-50',
+    backgroundColor: 'bg-red-900',
     accentBackgroundColor: 'bg-amber-300',
     secondaryBackgroundColor: 'bg-zinc-300',
 
@@ -81,7 +81,7 @@ export const Themes: IThemes = {
     accentTextColor: 'text-pink-900',
     secondaryTextColor: 'text-gray-600',
 
-    backgroundColor: 'bg-amber-50',
+    backgroundColor: 'bg-blue-900',
     accentBackgroundColor: 'bg-pink-300',
     secondaryBackgroundColor: 'bg-zinc-300',
 

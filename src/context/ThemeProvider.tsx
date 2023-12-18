@@ -32,7 +32,6 @@ export const ThemeProvider = ({ children }: ThemeProviderProps): React.ReactNode
     // Set the new theme
     setThemeName(newTheme)
     setTheme(Themes[newTheme])
-    console.log(`Theme changed to ${newTheme}`)
   }
 
   return (
