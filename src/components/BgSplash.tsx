@@ -7,20 +7,22 @@ import { ThemeContext } from '../context/ThemeProvider'
 const BgSplash = (): React.ReactNode => {
   const { theme } = useContext(ThemeContext)
   const [bgColor, setBgColor] = useState(theme.backgroundColor)
+  const [newTheme, setNewTheme] = useState(theme)
 
   useEffect(() => {
     setTimeout(() => {
       setBgColor(theme.backgroundColor)
+      setNewTheme(theme)
     }, 600)
   }, [theme])
 
   return (
     <View className={`absolute w-full h-full ${bgColor}`}>
       <LottieView
-        source={theme.splash.file}
+        source={newTheme.splash.file}
         autoPlay
         loop
-        speed={theme.splash.speed ?? 1}
+        speed={newTheme.splash.speed ?? 1}
       />
     </View>
   )

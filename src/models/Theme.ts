@@ -26,7 +26,7 @@ interface Splash {
 
 export enum ThemeNames {
   VIOLET = 'violet',
-  AMBER = 'amber',
+  LIME = 'lime',
   PINK = 'pink'
 }
 
@@ -45,26 +45,26 @@ export const Themes: IThemes = {
 
     backgroundColor: 'bg-amber-50',
     accentBackgroundColor: 'bg-violet-300',
-    secondaryBackgroundColor: 'bg-zinc-300',
+    secondaryBackgroundColor: 'bg-gray-300',
 
     borderColor: 'border-amber-50',
     accentBorderColor: 'border-violet-100'
   },
-  [ThemeNames.AMBER]: {
+  [ThemeNames.LIME]: {
     splash: {
-      name: 'work guy',
-      file: require('../assets/lottie/work-guy.json'),
+      name: 'study girl',
+      file: require('../assets/lottie/study-girl.json'),
       id: '1',
-      speed: 0.4
+      speed: 1
     },
 
     textColor: 'text-black',
     accentTextColor: 'text-amber-900',
     secondaryTextColor: 'text-gray-600',
 
-    backgroundColor: 'bg-red-900',
-    accentBackgroundColor: 'bg-amber-300',
-    secondaryBackgroundColor: 'bg-zinc-300',
+    backgroundColor: 'bg-lime-50',
+    accentBackgroundColor: 'bg-lime-600',
+    secondaryBackgroundColor: 'bg-gray-300',
 
     borderColor: 'border-violet-50',
     accentBorderColor: 'border-amber-100'
@@ -72,7 +72,7 @@ export const Themes: IThemes = {
   [ThemeNames.PINK]: {
     splash: {
       name: 'work guy',
-      file: require('../assets/lottie/work-guy.json'),
+      file: require('../assets/lottie/chill-on-bad.json'),
       id: '1',
       speed: 0.4
     },
@@ -87,5 +87,24 @@ export const Themes: IThemes = {
 
     borderColor: 'border-amber-50',
     accentBorderColor: 'border-pink-100'
+  },
+  default: {
+    splash: {
+      name: 'work guy',
+      file: require('../assets/lottie/work-guy.json'),
+      id: '1',
+      speed: 0.4
+    },
+
+    textColor: 'text-black',
+    accentTextColor: 'text-violet-900',
+    secondaryTextColor: 'text-gray-600',
+
+    backgroundColor: 'bg-amber-50',
+    accentBackgroundColor: 'bg-violet-300',
+    secondaryBackgroundColor: 'bg-zinc-300',
+
+    borderColor: 'border-amber-50',
+    accentBorderColor: 'border-violet-100'
   }
 }
