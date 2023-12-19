@@ -78,7 +78,7 @@ export const Themes: IThemes = {
       speed: 0.8
     },
 
-    textColor: 'text-white',
+    textColor: 'text-black',
     accentTextColor: 'text-rose-700',
     secondaryTextColor: 'text-gray-600',
 

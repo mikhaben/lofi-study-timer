@@ -4,7 +4,11 @@ import { useContext, useState } from 'react'
 
 import { ThemeContext } from '../context/ThemeProvider'
 
-const Menu = (): any => {
+interface MenuProps {
+  togglePromo: () => void
+}
+
+const Menu = ({ togglePromo }: MenuProps): any => {
   const [isButtonBlocked, setIsButtonBlocked] = useState(false)
   const { toggleTheme, theme } = useContext(ThemeContext)
 
@@ -30,7 +34,7 @@ const Menu = (): any => {
         <Text className={`text-base ${theme.accentTextColor}`}>Sprint</Text>
       </Pressable>
 
-      <Pressable>
+      <Pressable onPress={togglePromo}>
         <IonicIcon name={'time-outline'} size={22} />
       </Pressable>
 
