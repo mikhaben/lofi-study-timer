@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { type Task } from '../models/Main'
+import { ThemeNames } from '../models/Theme'
 
 export default class StorageService {
   private static logError (e: any): void {
@@ -51,6 +52,28 @@ export default class StorageService {
       await AsyncStorage.removeItem('tasks')
     } catch (e) {
       this.logError(e)
+    }
+  }
+
+  static async saveTheme (themeName: string): Promise<void> {
+    try {
+      await AsyncStorage.setItem('theme', themeName)
+    } catch (e) {
+      this.logError(e)
+    }
+  }
+
+  static async getTheme (): Promise<string> {
+    const defaultTheme = ThemeNames.VIOLET
+    try {
+      const value = await AsyncStorage.getItem('theme')
+      if (!value) {
+        return defaultTheme
+      }
+      return value
+    } catch (e) {
+      this.logError(e)
+      return defaultTheme
     }
   }
 }
