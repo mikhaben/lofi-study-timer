@@ -1,9 +1,14 @@
 {
   "expo": {
+    "name": "Lofi Study Timer",
+    "slug": "lofi-study-timer",
     "extra": {
       "eas": {
         "projectId": "6c8178e7-b135-4cb6-b071-7d572e4dc1c6"
       }
+    },
+    "android": {
+      "package": "com.justluther.lofistudytimer"
     }
   }
 }

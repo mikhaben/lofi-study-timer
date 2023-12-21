@@ -2,6 +2,7 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.18.2",
     "expo": "^49.0.3",
+    "expo-dev-client": "~2.4.12",
     "expo-status-bar": "~1.6.0",
     "lottie-react-native": "5.1.6",
     "nativewind": "^2.0.11",
@@ -14,7 +15,6 @@
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@types/react": "~18.2.14",
-    "@types/react-native": "~0.70.6",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "date-fns": "^2.30.0",
     "eslint": "^8.52.0",
