@@ -9,6 +9,9 @@
     },
     "android": {
       "package": "com.justluther.lofistudytimer"
+    },
+    "ios": {
+      "bundleIdentifier": "com.justluther.lofistudytimer"
     }
   }
 }
